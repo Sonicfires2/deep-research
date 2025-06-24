@@ -8,7 +8,6 @@ const FORCED_LANG = "en";
 
 function I18Provider({ children }: { children: React.ReactNode }) {
   // you can still keep the store in case other parts of the app read it
-  const { language } = useSettingStore();
 
   useLayoutEffect(() => {
     const settingStore = useSettingStore.getState();
@@ -26,7 +25,7 @@ function I18Provider({ children }: { children: React.ReactNode }) {
     // 3️⃣ keep HTML attrs + title consistent
     document.documentElement.setAttribute("lang", FORCED_LANG);
     document.title = i18n.t("title");
-  }, []);                   // ← no deps: runs once, not on language changes
+  }, []);                  
 
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 }

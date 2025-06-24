@@ -16,7 +16,7 @@ const SUPPORTED = [FORCED_LANG];   // English only
 i18next
   .use(initReactI18next)
   .use(
-    resourcesToBackend((lang: string) =>
+    resourcesToBackend(() =>
       import(`../locales/${FORCED_LANG}.json`)  // ← always load en-US file
     )
   )
