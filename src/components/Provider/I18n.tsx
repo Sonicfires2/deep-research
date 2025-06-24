@@ -12,12 +12,10 @@ function I18Provider({ children }: { children: React.ReactNode }) {
   useLayoutEffect(() => {
     const settingStore = useSettingStore.getState();
 
-    // 1️⃣ overwrite the store (if you keep it)
     if (settingStore.language !== FORCED_LANG) {
       settingStore.update({ language: FORCED_LANG });
     }
 
-    // 2️⃣ tell i18next to use English
     if (i18n.language !== FORCED_LANG) {
       i18n.changeLanguage(FORCED_LANG);
     }
