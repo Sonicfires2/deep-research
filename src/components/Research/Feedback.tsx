@@ -1,3 +1,5 @@
+// This is section 2.1 and 2.2
+
 "use client";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
@@ -81,7 +83,9 @@ function Feedback() {
   return (
     <section className="p-4 border rounded-md mt-4 print:hidden">
       <h3 className="font-semibold text-lg border-b mb-2 leading-10">
-        {t("research.feedback.title")}
+        {
+          t("research.feedback.title")
+        }
       </h3>
       {taskStore.questions === "" ? (
         <div>{t("research.feedback.emptyTip")}</div>
@@ -140,7 +144,9 @@ function Feedback() {
       {taskStore.reportPlan !== "" ? (
         <div className="mt-6">
           <h4 className="text-base font-semibold">
-            {t("research.feedback.reportPlan")}
+            {
+              t("research.feedback.reportPlan")
+            }
           </h4>
           <MagicDown
             className="mt-2 min-h-20"

@@ -93,7 +93,7 @@ Expected output:
 ]
 \`\`\``;
 
-export const serpQueriesPrompt = `This is the report plan after user confirmation:
+export const serpQueriesPrompt = `This is the report plan after user confirmation. Be sure to write the reports in English:
 <PLAN>
 {plan}
 </PLAN>
@@ -112,7 +112,7 @@ You need to organize the searched information according to the following require
 {researchGoal}
 </RESEARCH_GOAL>
 
-You need to think like a human researcher.
+You need to think like an English human researcher who write in English.
 Generate a list of learnings from the search results.
 Make sure each learning is unique and not similar to each other.
 The learnings should be to the point, as detailed and information dense as possible.
@@ -139,8 +139,9 @@ The following context from the SERP search:
 {context}
 </CONTEXT>
 
-You need to think like a human researcher.
+You need to think like an English human researcher.
 Generate a list of learnings from the contexts.
+If the list of learnings include people, be sure to ALWAYS include their LinkedIn Profiles.
 Make sure each learning is unique and not similar to each other.
 The learnings should be to the point, as detailed and information dense as possible.
 Make sure to include any entities like people, places, companies, products, things, etc in the learnings, as well as any specific entities, metrics, numbers, and dates when available. The learnings will be used to research the topic further.`;
@@ -160,11 +161,13 @@ The following contexts from the SERP search:
 {context}
 </CONTEXT>
 
-You need to think like a human researcher.
+You need to think like an English human researcher - especially a data analytics who focuses on competitors analysis.
 Generate a list of learnings from the contents.
 Make sure each learning is unique and not similar to each other.
 The learnings should be to the point, as detailed and information dense as possible.
-Make sure to include any entities like people, places, companies, products, things, etc in the learnings, as well as any specific entities, metrics, numbers, and dates when available. The learnings will be used to research the topic further.`;
+Make sure to include any entities like people, places, companies, products, things, etc in the learnings, as well as any specific entities, metrics, numbers, and dates when available. 
+The learnings will be used to research the topic further.
+Make sure to include people's LinkedIn Profiles when necessary`;
 
 export const reviewPrompt = `This is the report plan after user confirmation:
 <PLAN>
@@ -208,7 +211,7 @@ export const finalReportPrompt = `This is the report plan after user confirmatio
 {plan}
 </PLAN>
 
-Here are all the learnings from previous research:
+Here are all the learnings from previous research (be sure to include people - LinkedIn profiles pairs from previous research):
 <LEARNINGS>
 {learnings}
 </LEARNINGS>
@@ -228,7 +231,7 @@ Please write according to the user's writing requirements, if any:
 {requirement}
 </REQUIREMENT>
 
-Write a final report based on the report plan using the learnings from research.
+Write a final report based on the report plan using the learnings from research. Write in English
 Make it as detailed as possible, aim for 5 pages or more, the more the better, include ALL the learnings from research.
 **Respond only the final report content, and no additional text before or after.**`;
 

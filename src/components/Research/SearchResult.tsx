@@ -1,3 +1,5 @@
+// This is for the whole of section 3
+
 "use client";
 import dynamic from "next/dynamic";
 import { useState, useEffect, useMemo } from "react";
@@ -331,8 +333,10 @@ function SearchResult() {
                   </>
                 ) : taskFinished ? (
                   t("research.common.indepthResearch")
+                  // "DEBUG"
                 ) : (
                   t("research.common.continueResearch")
+                  // "DEBUG"
                 )}
               </Button>
             </form>

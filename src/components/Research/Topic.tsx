@@ -1,3 +1,5 @@
+// This is section 1.1 and 1.2
+
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";

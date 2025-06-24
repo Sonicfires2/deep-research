@@ -2,23 +2,31 @@
 import { useLayoutEffect } from "react";
 import { I18nextProvider } from "react-i18next";
 import { useSettingStore } from "@/store/setting";
-import i18n, { detectLanguage } from "@/utils/i18n";
+import i18n from "@/utils/i18n";          // ⬅️  no detectLanguage import
+
+const FORCED_LANG = "en";
 
 function I18Provider({ children }: { children: React.ReactNode }) {
+  // you can still keep the store in case other parts of the app read it
   const { language } = useSettingStore();
 
   useLayoutEffect(() => {
     const settingStore = useSettingStore.getState();
-    if (settingStore.language === "") {
-      const browserLang = detectLanguage();
-      settingStore.update({ language: browserLang });
-      i18n.changeLanguage(browserLang);
-    } else {
-      i18n.changeLanguage(language);
+
+    // 1️⃣ overwrite the store (if you keep it)
+    if (settingStore.language !== FORCED_LANG) {
+      settingStore.update({ language: FORCED_LANG });
     }
-    document.documentElement.setAttribute("lang", language);
+
+    // 2️⃣ tell i18next to use English
+    if (i18n.language !== FORCED_LANG) {
+      i18n.changeLanguage(FORCED_LANG);
+    }
+
+    // 3️⃣ keep HTML attrs + title consistent
+    document.documentElement.setAttribute("lang", FORCED_LANG);
     document.title = i18n.t("title");
-  }, [language]);
+  }, []);                   // ← no deps: runs once, not on language changes
 
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 }
