@@ -1,30 +1,34 @@
-// src/utils/i18n.ts
 import i18next from "i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
+import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
+import locales from "@/constants/locales";
+import { keys } from "radash";
 
-// ───────────────────────────────────────────────────────────
-// 1️⃣  pick ONE constant language for the whole app
-const FORCED_LANG = "en-US";
+const normalizeLocale = (locale: string) => {
+  console.log(locale);
+  return "en-US";
+};
 
-// 2️⃣  if you have a locales map, keep it—or just hard-code ["en-US"]
-// import locales from "@/constants/locales";
-// const SUPPORTED = Object.keys(locales);
-const SUPPORTED = [FORCED_LANG];   // English only
+export function detectLanguage() {
+  const languageDetector = new LanguageDetector();
+  languageDetector.init();
+  const detectedLang = languageDetector.detect();
+  console.log("Detected:", detectedLang);
+  let lang: string = "en-US";
+  return lang;
+}
 
-// 3️⃣  init i18next
 i18next
   .use(initReactI18next)
   .use(
-    resourcesToBackend(() =>
-      import(`../locales/${FORCED_LANG}.json`)  // ← always load en-US file
-    )
+    resourcesToBackend(async (lang: string) => {
+      return await import(`../locales/${normalizeLocale(lang)}.json`);
+    })
   )
   .init({
-    lng: FORCED_LANG,          // force at bootstrap
-    fallbackLng: FORCED_LANG,  // always fall back to English
-    supportedLngs: SUPPORTED,  // optional, but keeps i18next strict
-    // detection: { }          // ⬅️  removed: no browser detection
+    supportedLngs: keys(locales),
+    fallbackLng: "en-US",
   });
 
 export default i18next;
