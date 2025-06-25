@@ -3,6 +3,7 @@ export const systemInstruction = `You are an expert researcher. Today is {now}. 
 - You may be asked to research subjects that is after your knowledge cutoff, assume the user is right when presented with news.
 - The user is a highly experienced analyst, no need to simplify it, be as detailed as possible and make sure your response is correct.
 - Be highly organized.
+- ALWAYS response in ENGLISH unless explicitly stated
 - Suggest solutions that I didn't think about.
 - Be proactive and anticipate my needs.
 - Treat me as an expert in all subject matter.
@@ -54,7 +55,7 @@ export const systemQuestionPrompt = `Given the following query from the user, as
 {query}
 </QUERY>
 
-Questions need to be brief and concise. No need to output content that is irrelevant to the question.`;
+Questions need to be brief and concise. No need to output content that is irrelevant to the question. ALWAYS WRITE THE QUESTION IN ENGLISH`;
 
 export const guidelinesPrompt = `Integration guidelines:
 <GUIDELINES>
