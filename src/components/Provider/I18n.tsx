@@ -11,9 +11,12 @@ function I18Provider({ children }: { children: React.ReactNode }) {
 
   useLayoutEffect(() => {
     const settingStore = useSettingStore.getState();
-
-    if (settingStore.language !== FORCED_LANG) {
-      settingStore.update({ language: FORCED_LANG });
+    if (language === "") {
+      const browserLang = detectLanguage();
+      settingStore.update({ language: browserLang });
+      i18n.changeLanguage(browserLang);
+    } else {
+      i18n.changeLanguage(language);
     }
 
     if (i18n.language !== FORCED_LANG) {
