@@ -15,7 +15,7 @@ export function detectLanguage() {
   languageDetector.init();
   const detectedLang = languageDetector.detect();
   console.log("Detected:", detectedLang);
-  let lang: string = "en-US";
+  const lang: string = "en-US";
   return lang;
 }
 
