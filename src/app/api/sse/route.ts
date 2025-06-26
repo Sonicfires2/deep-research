@@ -17,7 +17,7 @@ export const preferredRegion = [
 ];
 
 // 1) Preflight handler
-export function OPTIONS(_: NextRequest) {
+export function OPTIONS(_req: NextRequest) {
   return new NextResponse(null, {
     status: 204,
     headers: {
