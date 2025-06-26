@@ -17,6 +17,7 @@ export const preferredRegion = [
 ];
 
 // 1) Preflight handler
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function OPTIONS(_req: NextRequest) {
   return new NextResponse(null, {
     status: 204,
