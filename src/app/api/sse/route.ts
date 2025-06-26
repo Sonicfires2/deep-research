@@ -1,3 +1,4 @@
+// app/api/sse/route.ts
 import { NextResponse, type NextRequest } from "next/server";
 import DeepResearch from "@/utils/deep-research";
 import { multiApiKeyPolling } from "@/utils/model";
@@ -11,16 +12,24 @@ import {
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
 export const preferredRegion = [
-  "cle1",
-  "iad1",
-  "pdx1",
-  "sfo1",
-  "sin1",
-  "syd1",
-  "hnd1",
-  "kix1",
+  "cle1", "iad1", "pdx1", "sfo1",
+  "sin1", "syd1", "hnd1", "kix1",
 ];
 
+// 1) Preflight handler
+export function OPTIONS(_: NextRequest) {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Max-Age": "86400",
+    },
+  });
+}
+
+// 2) Main SSE handler
 export async function POST(req: NextRequest) {
   const {
     query,
@@ -35,9 +44,9 @@ export async function POST(req: NextRequest) {
   } = await req.json();
 
   const encoder = new TextEncoder();
-  const readableStream = new ReadableStream({
+  const stream = new ReadableStream({
     start: async (controller) => {
-      console.log("Client connected");
+      // initial infor event
       controller.enqueue(
         encoder.encode(
           `event: infor\ndata: ${JSON.stringify({
@@ -63,49 +72,44 @@ export async function POST(req: NextRequest) {
           maxResult,
         },
         onMessage: (event, data) => {
-          if (event === "progress") {
-            console.log(
-              `[${data.step}]: ${data.name ? `"${data.name}" ` : ""}${
-                data.status
-              }`
-            );
-            if (data.step === "final-report" && data.status === "end") {
-              controller.close();
-            }
-          } else if (event === "error") {
-            console.error(data);
-            controller.close();
-          } else {
-            console.warn(`Unknown event: ${event}`);
-          }
+          // enqueue each SSE event
           controller.enqueue(
             encoder.encode(
-              `event: ${event}\ndata: ${JSON.stringify(data)})}\n\n`
+              `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`
             )
           );
+
+          // auto-close on final-report
+          if (event === "progress" &&
+              data.step === "final-report" &&
+              data.status === "end") {
+            controller.close();
+          }
         },
       });
 
-      req.signal.addEventListener("abort", () => {
-        controller.close();
-      });
+      req.signal.addEventListener("abort", () => controller.close());
 
       try {
         await deepResearch.start(query, enableCitationImage, enableReferences);
       } catch (err) {
-        throw new Error(err instanceof Error ? err.message : "Unknown error");
+        console.error(err);
+        controller.close();
       }
-      controller.close();
     },
   });
 
-  return new NextResponse(readableStream, {
+  return new NextResponse(stream, {
     headers: {
       "Content-Type": "text/event-stream; charset=utf-8",
       "Cache-Control": "no-cache, no-transform",
       Connection: "keep-alive",
       "X-Accel-Buffering": "no",
+
+      // 💥 CORS headers on the actual response
       "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
   });
 }
