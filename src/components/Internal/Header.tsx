@@ -1,10 +1,8 @@
 "use client";
 import { useTranslation } from "react-i18next";
-import { Settings, Github, History, BookText } from "lucide-react";
+import { Settings, History, BookText } from "lucide-react";
 import { Button } from "@/components/Internal/Button";
 import { useGlobalStore } from "@/store/global";
-
-const VERSION = process.env.NEXT_PUBLIC_VERSION;
 
 function Header() {
   const { t } = useTranslation();
